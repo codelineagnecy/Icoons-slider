@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Slider</title>
+    
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .tool-slider-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 40px;
+        }
+        
+        .tool-slider-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .tool-slider-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+        
+        .tool-slider-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        /* Slick Slider Overrides */
+        .slick-slider {
+            overflow: visible !important;
+        }
+        
+        .slick-list {
+            overflow: visible !important;
+        }
+        
+        .slick-track {
+            display: flex !important;
+            align-items: center !important;
+            transition: transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
+        .slick-slide {
+            padding: 20px 0;
+            transition: all 400ms ease;
+        }
+        
+        .tool-item {
+            padding: 0 12px;
+        }
+        
+        .tool-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tool-icon {
+            background-color: #f3f4f6;
+            border-radius: 16px;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tool-icon:hover {
+            background-color: #e5e7eb;
+            transform: scale(1.1);
+        }
+        
+        .tool-icon svg {
+            width: 32px;
+            height: 32px;
+        }
+        
+        /* Tooltip */
+        .tool-tooltip {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px);
+            transform: translateX(-50%);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            pointer-events: none;
+        }
+        
+        .tool-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .tool-tooltip-content {
+            background-color: #1f2937;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            min-width: 220px;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .tool-tooltip-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 6px;
+        }
+        
+        .tool-tooltip-description {
+            font-size: 0.75rem;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+        
+        .tool-tooltip-arrow {
+            position: absolute;
+            left: 50%;
+            bottom: -4px;
+            transform: translateX(-50%) rotate(45deg);
+            width: 12px;
+            height: 12px;
+            background-color: #1f2937;
+            border-right: 1px solid #374151;
+            border-bottom: 1px solid #374151;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tool-slider-container">
+        <div class="tool-slider-header">
+            <h1>Tool Integraties</h1>
+            <p>Hover over de iconen voor meer informatie</p>
+        </div>
+        
+        <div class="tool-slider">
+            <!-- Monday -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #ff3d57;">
+                        <i data-lucide="bar-chart-2"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Monday</div>
+                            <div class="tool-tooltip-description">Project management tool</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notion -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #000000;">
+                        <i data-lucide="message-square"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Notion</div>
+                            <div class="tool-tooltip-description">Workspace voor notities</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Figma -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #a259ff;">
+                        <i data-lucide="figma"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Figma</div>
+                            <div class="tool-tooltip-description">Design tool voor UI/UX</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Calendly -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #006bff;">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Calendly</div>
+                            <div class="tool-tooltip-description">Kalender planning tool</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zapier -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #ff4a00;">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Zapier</div>
+                            <div class="tool-tooltip-description">Automatiseer workflows</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analytics -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #ffc107;">
+                        <i data-lucide="bar-chart-2"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Analytics</div>
+                            <div class="tool-tooltip-description">Data analyse platform</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slack -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #e01e5a;">
+                        <i data-lucide="message-square"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Slack</div>
+                            <div class="tool-tooltip-description">Communicatie platform</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GitHub -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #24292e;">
+                        <i data-lucide="git-branch"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">GitHub</div>
+                            <div class="tool-tooltip-description">Code repository tool</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mailchimp -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #ca8b04;">
+                        <i data-lucide="bell"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Mailchimp</div>
+                            <div class="tool-tooltip-description">Email marketing tool</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spotify -->
+            <div class="tool-item">
+                <div class="tool-icon-wrapper">
+                    <div class="tool-icon" style="color: #1db954;">
+                        <i data-lucide="heart"></i>
+                    </div>
+                    <div class="tool-tooltip">
+                        <div class="tool-tooltip-content">
+                            <div class="tool-tooltip-title">Spotify</div>
+                            <div class="tool-tooltip-description">Muziek streaming service</div>
+                        </div>
+                        <div class="tool-tooltip-arrow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (required for Slick) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Slick Carousel JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Initialize Slick Slider
+        $(document).ready(function(){
+            $('.tool-slider').slick({
+                dots: false,
+                infinite: true,
+                speed: 800,
+                slidesToShow: 8,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                pauseOnHover: true,
+                cssEase: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                useCSS: true,
+                useTransform: true,
+                responsive: [
+                    {
+                        breakpoint: 1400,
+                        settings: {
+                            slidesToShow: 6
+                        }
+                    },
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 5
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 4
+                        }
+                    },
+                    {
+                        breakpoint: 640,
+                        settings: {
+                            slidesToShow: 3
+                        }
+                    }
+                ]
+            });
+            
+            // Tooltip hover functionality
+            $('.tool-icon-wrapper').hover(
+                function() {
+                    $(this).find('.tool-tooltip').addClass('show');
+                },
+                function() {
+                    $(this).find('.tool-tooltip').removeClass('show');
+                }
+            );
+        });
+    </script>
+
+</body>
+</html>

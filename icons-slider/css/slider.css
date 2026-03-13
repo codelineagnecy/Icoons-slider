@@ -1,0 +1,258 @@
+/* Slider styles */
+.icons-slider-wrapper {
+    --icons-logo-size: 55px;
+    --icons-card-size: 110px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.icons-slider-container {
+    position: relative;
+    overflow: hidden; /* prevent manual scrolling */
+}
+
+/* inner track that is moved left continuously */
+.icons-slider-track {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    will-change: transform;
+}
+
+.icons-slide {
+    flex: 0 0 auto;
+    width: var(--icons-card-size);
+    padding: 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    text-align: center;
+}
+
+.icons-slide { position: relative; }
+
+.icons-slide img {
+    width: var(--icons-logo-size);
+    max-width: var(--icons-logo-size);
+    max-height: var(--icons-logo-size);
+    height: var(--icons-logo-size);
+    margin-bottom: 8px;
+    object-fit: cover;
+}
+
+.icons-slide h4 {
+    font-size: 1rem;
+    margin: 6px 0;
+}
+
+/* Strong overrides for page builders (Elementor, theme styles) */
+.icons-slider-wrapper .icons-slider-track {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.icons-slider-wrapper .icons-slide,
+.elementor .icons-slider-wrapper .icons-slide,
+.elementor-editor-active .icons-slider-wrapper .icons-slide {
+    width: var(--icons-card-size) !important;
+    min-width: var(--icons-card-size) !important;
+    max-width: var(--icons-card-size) !important;
+    padding: 10px !important;
+}
+
+    /* Fallback selectors when Elementor uses different widget class naming */
+    .elementor .icons-slider-wrapper .icons-slide,
+    .elementor-editor-active .icons-slider-wrapper .icons-slide,
+    [class*="elementor-widget"] .icons-slider-wrapper .icons-slide {
+        width: var(--icons-card-size) !important;
+        min-width: var(--icons-card-size) !important;
+        max-width: var(--icons-card-size) !important;
+        padding: 10px !important;
+    }
+
+    .elementor .icons-slider-wrapper .icons-slide img,
+    .elementor .icons-slider-wrapper .slide-image img,
+    .elementor-editor-active .icons-slider-wrapper .icons-slide img,
+    .elementor-editor-active .icons-slider-wrapper .slide-image img,
+    [class*="elementor-widget"] .icons-slider-wrapper .icons-slide img,
+    [class*="elementor-widget"] .icons-slider-wrapper .slide-image img {
+        width: var(--icons-logo-size) !important;
+        height: var(--icons-logo-size) !important;
+        max-width: var(--icons-logo-size) !important;
+        max-height: var(--icons-logo-size) !important;
+        min-width: var(--icons-logo-size) !important;
+        min-height: var(--icons-logo-size) !important;
+        object-fit: cover !important;
+    }
+
+.icons-slider-wrapper .slide-image,
+.elementor .icons-slider-wrapper .slide-image {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: var(--icons-logo-size) !important;
+}
+
+.icons-slider-wrapper .icons-slide img,
+.icons-slider-wrapper .slide-image img,
+.elementor .icons-slider-wrapper .icons-slide img,
+.elementor .icons-slider-wrapper .slide-image img,
+.elementor-editor-active .icons-slider-wrapper .icons-slide img {
+    width: var(--icons-logo-size) !important;
+    height: var(--icons-logo-size) !important;
+    max-width: var(--icons-logo-size) !important;
+    max-height: var(--icons-logo-size) !important;
+    object-fit: cover !important;
+}
+
+/* hide title and description by default - only image/logo visible */
+
+.slide-tooltip-wrapper{ 
+    display:none; 
+    position:fixed; 
+    z-index:9999; 
+    white-space: nowrap;
+}
+.slide-title, .slide-tooltip-wrapper .slide-desc{ margin:0; }
+
+/* tooltip hidden by default, shown by JS */
+
+/* style the title and description as a single unified tooltip box */
+.slide-title{
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+}
+.slide-tooltip-wrapper .slide-desc{
+    display: block;
+    color: #dbe9ff;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.slide-tooltip-wrapper{
+    background: #071028;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(6,15,30,0.35);
+    padding: 12px 16px;
+    text-align: center;
+}
+
+/* pointer arrow under tooltip */
+.slide-tooltip-wrapper::after{
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #071028;
+}
+
+/* overflow visible on wrapper so tooltips are not clipped */
+.icons-slider-wrapper { overflow: visible; }
+
+/* keep pointer events for clicks, but disable native touch scrolling */
+.icons-slider-container {
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+/* Elementor editor preview: keep slides centered and stable while editing */
+.icons-slider-editor-mode .icons-slider-container {
+    overflow: visible;
+}
+
+.icons-slider-editor-mode .icons-slider-track {
+    justify-content: center;
+    transform: none !important;
+}
+
+.icons-slider-editor-mode .icons-slide {
+    width: var(--icons-card-size);
+}
+
+/* Elementor widget-specific hard sizing (for custom Icons Slider widget) */
+.elementor-widget-icons_slider .icons-slider-wrapper {
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+.elementor-widget-icons_slider .icons-slider-track {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+}
+
+.elementor-widget-icons_slider .icons-slide {
+    width: var(--icons-card-size) !important;
+    min-width: var(--icons-card-size) !important;
+    max-width: var(--icons-card-size) !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+}
+
+.elementor-widget-icons_slider .slide-image {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: var(--icons-logo-size) !important;
+}
+
+.elementor-widget-icons_slider .icons-slide img,
+.elementor-widget-icons_slider .slide-image img {
+    width: var(--icons-logo-size) !important;
+    height: var(--icons-logo-size) !important;
+    max-width: var(--icons-logo-size) !important;
+    max-height: var(--icons-logo-size) !important;
+    object-fit: cover !important;
+}
+
+/* Smart fit: wide/text logos keep full content visible. */
+.icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image img,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image img,
+.elementor-editor-active .icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain img,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain .slide-image img {
+    object-fit: contain !important;
+}
+
+/* Make text logos more readable: wider card and wider image canvas. */
+.icons-slider-wrapper .icons-slide.logo-fit-contain,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain,
+.elementor-editor-active .icons-slider-wrapper .icons-slide.logo-fit-contain,
+[class*="elementor-widget"] .icons-slider-wrapper .icons-slide.logo-fit-contain,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain {
+    width: calc(var(--icons-card-size) * 1.75) !important;
+    min-width: calc(var(--icons-card-size) * 1.75) !important;
+    max-width: calc(var(--icons-card-size) * 1.75) !important;
+}
+
+.icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image,
+.elementor-editor-active .icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain .slide-image {
+    min-height: calc(var(--icons-logo-size) * 1.05) !important;
+}
+
+.icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image img,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.elementor .icons-slider-wrapper .icons-slide.logo-fit-contain .slide-image img,
+.elementor-editor-active .icons-slider-wrapper .icons-slide.logo-fit-contain img,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain img,
+.elementor-widget-icons_slider .icons-slide.logo-fit-contain .slide-image img {
+    width: calc(var(--icons-logo-size) * 1.6) !important;
+    max-width: calc(var(--icons-logo-size) * 1.6) !important;
+    height: var(--icons-logo-size) !important;
+    max-height: var(--icons-logo-size) !important;
+}
