@@ -17,7 +17,27 @@
     display: flex;
     gap: 20px;
     align-items: stretch;
+    justify-content: flex-start;
     will-change: transform;
+}
+
+/* Static state (<5 logos): keep centered with spacious layout like a logo strip. */
+.icons-slider-container.icons-slider-static {
+    overflow: visible;
+}
+
+.icons-slider-container.icons-slider-static .icons-slider-track {
+    justify-content: space-evenly;
+    gap: clamp(70px, 13vw, 280px);
+    transform: none !important;
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    .icons-slider-container.icons-slider-static .icons-slider-track {
+        justify-content: center;
+        gap: clamp(24px, 7vw, 56px);
+    }
 }
 
 .icons-slide {

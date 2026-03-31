@@ -186,11 +186,13 @@ function icons_slider_details_cb($post){
 }
 add_action('save_post_icon_slide','icons_slider_save_meta');
 function icons_slider_save_meta($post_id){
-    if(!isset($_POST['icons_slider_nonce'])||!wp_verify_nonce($_POST['icons_slider_nonce'],'icons_slider_save')) return;
+    if(!isset($_POST['icons_slider_nonce'])||!wp_verify_nonce(wp_unslash($_POST['icons_slider_nonce']),'icons_slider_save')) return;
     if(defined('DOING_AUTOSAVE')&&DOING_AUTOSAVE) return;
-    if(isset($_POST['slide_description'])) update_post_meta($post_id,'slide_description',sanitize_text_field($_POST['slide_description']));
+    if(!current_user_can('edit_post', $post_id)) return;
+
+    if(isset($_POST['slide_description'])) update_post_meta($post_id,'slide_description',sanitize_textarea_field(wp_unslash($_POST['slide_description'])));
     if(isset($_POST['slide_order'])){
-        $val=intval($_POST['slide_order']);
+        $val=intval(wp_unslash($_POST['slide_order']));
         if($val<=0) $val=1000;
         update_post_meta($post_id,'slide_order',$val);
     }else{
@@ -312,7 +314,7 @@ function icons_slider_normalize_page() {
         wp_die('Unauthorized');
     }
 
-    $cat_slug = isset($_GET['cat']) ? sanitize_title($_GET['cat']) : '';
+    $cat_slug = isset($_GET['cat']) ? sanitize_title(wp_unslash($_GET['cat'])) : '';
 
     if ($cat_slug) {
         // ── CATEGORY DETAIL VIEW ──────────────────────────────────
@@ -416,8 +418,8 @@ function icons_slider_normalize_page() {
 
         <script>
         jQuery(document).ready(function($) {
-            var saveNonce   = '<?php echo wp_create_nonce("icons_slider_save_per_logo_sizes_nonce"); ?>';
-            var normNonce   = '<?php echo wp_create_nonce("icons_slider_normalize_nonce"); ?>';
+            var saveNonce   = '<?php echo esc_js(wp_create_nonce("icons_slider_save_per_logo_sizes_nonce")); ?>';
+            var normNonce   = '<?php echo esc_js(wp_create_nonce("icons_slider_normalize_nonce")); ?>';
             var catSlug     = '<?php echo esc_js($cat_slug); ?>';
 
             // Bulk apply: fill inputs + directly save all logos in this category
@@ -511,7 +513,7 @@ function icons_slider_normalize_page() {
             <p style="color:#666; margin-top:4px;">Kies een categorie om de logos te bewerken.</p>
 
             <?php if (empty($categories) || is_wp_error($categories)): ?>
-                <div class="notice notice-warning"><p>Er zijn nog geen categorieën aangemaakt. Maak eerst categorieën aan onder <a href="<?php echo admin_url('edit-tags.php?taxonomy=icon_slide_category&post_type=icon_slide'); ?>">Icons Slider → Categories</a>.</p></div>
+                <div class="notice notice-warning"><p>Er zijn nog geen categorieën aangemaakt. Maak eerst categorieën aan onder <a href="<?php echo esc_url(admin_url('edit-tags.php?taxonomy=icon_slide_category&post_type=icon_slide')); ?>">Icons Slider → Categories</a>.</p></div>
             <?php else: ?>
                 <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:20px;">
                 <?php foreach ($categories as $cat):
@@ -547,7 +549,7 @@ function icons_slider_normalize_page() {
  */
 add_action('wp_ajax_icons_slider_save_per_logo_sizes', 'icons_slider_ajax_save_per_logo_sizes');
 function icons_slider_ajax_save_per_logo_sizes() {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'icons_slider_save_per_logo_sizes_nonce')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'icons_slider_save_per_logo_sizes_nonce')) {
         wp_send_json_error(array('message' => 'Security check failed'));
     }
 
@@ -555,8 +557,8 @@ function icons_slider_ajax_save_per_logo_sizes() {
         wp_send_json_error(array('message' => 'Unauthorized'));
     }
 
-    $rows = isset($_POST['rows']) && is_array($_POST['rows']) ? $_POST['rows'] : array();
-    $cat_slug_save = isset($_POST['cat']) ? sanitize_title($_POST['cat']) : '';
+    $rows = isset($_POST['rows']) && is_array($_POST['rows']) ? wp_unslash($_POST['rows']) : array();
+    $cat_slug_save = isset($_POST['cat']) ? sanitize_title(wp_unslash($_POST['cat'])) : '';
     $meta_key = $cat_slug_save ? 'slide_logo_size_' . $cat_slug_save : 'slide_logo_size';
     $updated = 0;
 
@@ -596,7 +598,7 @@ function icons_slider_ajax_save_per_logo_sizes() {
 add_action('wp_ajax_icons_slider_normalize_images', 'icons_slider_ajax_normalize_images');
 function icons_slider_ajax_normalize_images() {
     // verify nonce and admin capability
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'icons_slider_normalize_nonce')) {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce(wp_unslash($_POST['nonce']), 'icons_slider_normalize_nonce')) {
         wp_send_json_error('Nonce verification failed');
     }
     
@@ -605,7 +607,7 @@ function icons_slider_ajax_normalize_images() {
     }
     
     // optionally filter by category
-    $cat_slug = isset($_POST['cat']) ? sanitize_title($_POST['cat']) : '';
+    $cat_slug = isset($_POST['cat']) ? sanitize_title(wp_unslash($_POST['cat'])) : '';
     $args = array(
         'post_type'      => 'icon_slide',
         'posts_per_page' => -1,

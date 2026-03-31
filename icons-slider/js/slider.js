@@ -32,6 +32,10 @@ jQuery(document).ready(function($){
         var $originalSlides = $track.children('.icons-slide').not('.is-clone');
         if(!$originalSlides.length) return;
 
+        function getMinSlidesForAnimation(){
+            return window.matchMedia('(max-width: 767px)').matches ? 3 : 5;
+        }
+
         var $tooltipsRoot = ensureTooltipsRoot();
 
         // move original tooltips to body-root once and keep index mapping on slides
@@ -56,10 +60,10 @@ jQuery(document).ready(function($){
             $track.children('.icons-slide.is-clone').remove();
             var originalWidth = getOriginalWidth() || 1;
             var slideCount = $originalSlides.length;
+            var minSlidesForAnimation = getMinSlidesForAnimation();
 
-            // only clone if there are 5 or more slides
-            // with less than 5, just show originals without cloning
-            var cloneFactor = slideCount >= 5 ? 3 : 0;
+            // Clone only when we should animate for current viewport.
+            var cloneFactor = slideCount >= minSlidesForAnimation ? 3 : 0;
 
             for(var i = 0; i < cloneFactor; i++){
                 $originalSlides.each(function(){
@@ -81,7 +85,7 @@ jQuery(document).ready(function($){
         }
 
         var slideCount = $originalSlides.length;
-        var cloneFactor = slideCount >= 5 ? 3 : 0;
+        var cloneFactor = slideCount >= getMinSlidesForAnimation() ? 3 : 0;
         cloneEnoughSlides();
 
         // Measure the actual rendered width of ONE set of slides from the DOM.
@@ -92,8 +96,16 @@ jQuery(document).ready(function($){
 
         var speed = 0.5;
         var pos = 0;
-        // only animate if we have 5+ slides (enough to clone)
-        var running = slideCount >= 5;
+        // Animate threshold is viewport-aware: mobile 3+, desktop 5+.
+        var running = slideCount >= getMinSlidesForAnimation();
+
+        function updateModeClass(){
+            var minSlidesForAnimation = getMinSlidesForAnimation();
+            $container.toggleClass('icons-slider-static', slideCount < minSlidesForAnimation);
+            $container.toggleClass('icons-slider-running', slideCount >= minSlidesForAnimation);
+        }
+
+        updateModeClass();
 
         function step(){
             if(!running) return;
@@ -112,7 +124,7 @@ jQuery(document).ready(function($){
             running = false;
         });
         $container.on('mouseleave.iconsSlider touchend.iconsSlider', function(){
-            running = slideCount >= 5;
+            running = slideCount >= getMinSlidesForAnimation();
         });
         $container.on('touchmove.iconsSlider', function(e){
             e.preventDefault();
@@ -120,7 +132,7 @@ jQuery(document).ready(function($){
 
         $(window).on('resize.iconsSlider', function(){
             slideCount = $originalSlides.length;
-            cloneFactor = slideCount >= 5 ? 3 : 0;
+            cloneFactor = slideCount >= getMinSlidesForAnimation() ? 3 : 0;
             cloneEnoughSlides();
             if (cloneFactor > 0) {
                 originalWidth = $track[0].scrollWidth / (1 + cloneFactor);
@@ -128,7 +140,8 @@ jQuery(document).ready(function($){
                 originalWidth = getOriginalWidth();
             }
             // update running state based on slide count
-            running = slideCount >= 5;
+            running = slideCount >= getMinSlidesForAnimation();
+            updateModeClass();
             if(pos >= originalWidth){
                 pos = pos % originalWidth;
             }
