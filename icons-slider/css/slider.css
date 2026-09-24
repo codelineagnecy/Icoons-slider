@@ -179,10 +179,12 @@
 /* overflow visible on wrapper so tooltips are not clipped */
 .icons-slider-wrapper { overflow: visible; }
 
-/* keep pointer events for clicks, but disable native touch scrolling */
+/* allow vertical page scrolling from inside the slider, but no manual horizontal dragging;
+   the second declaration keeps pinch-zoom where supported and is ignored elsewhere */
 .icons-slider-container {
-    -ms-touch-action: none;
-    touch-action: none;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    touch-action: pan-y pinch-zoom;
 }
 
 /* Elementor editor preview: keep slides centered and stable while editing */

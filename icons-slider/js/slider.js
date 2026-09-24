@@ -120,15 +120,25 @@ jQuery(document).ready(function($){
         var interval = setInterval(step, 16);
         $container.data('iconsSliderInterval', interval);
 
-        $container.on('mouseenter.iconsSlider touchstart.iconsSlider', function(){
+        function pause(){
             running = false;
-        });
-        $container.on('mouseleave.iconsSlider touchend.iconsSlider', function(){
+        }
+
+        function resume(){
             running = slideCount >= getMinSlidesForAnimation();
-        });
-        $container.on('touchmove.iconsSlider', function(e){
-            e.preventDefault();
-        });
+        }
+
+        $container.on('mouseenter.iconsSlider', pause);
+        $container.on('mouseleave.iconsSlider', resume);
+
+        // passive touch listeners: pause while touched, never block page scrolling;
+        // touchcancel also resumes because the browser may cancel the touch when it takes over a scroll
+        container.addEventListener('touchstart', pause, { passive: true });
+        container.addEventListener('touchend', function(e){
+            if(e.touches && e.touches.length) return;
+            resume();
+        }, { passive: true });
+        container.addEventListener('touchcancel', resume, { passive: true });
 
         $(window).on('resize.iconsSlider', function(){
             slideCount = $originalSlides.length;
