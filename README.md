@@ -70,6 +70,20 @@ Go to **Icons Slider > Edit Images** to:
 
 ## Changelog
 
+### Unreleased — performance
+
+- The auto-scroll is a time-based `requestAnimationFrame` loop at the same
+  speed as before (0.5 px per 16 ms = 31.25 px/s) instead of a permanent
+  `setInterval(step, 16)`, and writes the track transform directly instead
+  of through jQuery each frame.
+- It does no work while the slider is outside the viewport
+  (`IntersectionObserver`) or the tab is hidden (`visibilitychange`).
+  Hover, touch, resize and tooltip behaviour are unchanged; no new
+  reduced-motion behaviour.
+- Measured locally against DEV (file substituted in Chrome, not yet
+  deployed): speed 30.60–31.43 px/s vs 30.38–31.27 px/s before (within
+  ±2 %); 5-minute soak with no jumps, NaN transforms or duplicated slides.
+
 ### 1.0
 
 - Initial release

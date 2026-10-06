@@ -107,25 +107,66 @@ jQuery(document).ready(function($){
 
         updateModeClass();
 
-        function step(){
-            if(!running) return;
-            pos += speed;
-            // Reset after one set for seamless infinite loop
-            if(pos >= originalWidth){
-                pos -= originalWidth;
+        // Time-based requestAnimationFrame loop at the same rate as the former
+        // setInterval(step, 16) advancing `speed` px per tick (0.5 px / 16 ms =
+        // 31.25 px/s). It only runs while the slider is animating, in view and
+        // the tab is visible, so it does no work at all otherwise.
+        var pxPerSecond = speed * 1000 / 16;
+        var track = $track[0];
+        var rafId = 0;
+        var lastTs = null;
+        var inView = true;
+        var pageVisible = !document.hidden;
+
+        function frame(ts){
+            rafId = 0;
+            if(lastTs !== null){
+                // clamp so a long gap (e.g. a dropped frame burst) never jumps
+                pos += pxPerSecond * Math.min(ts - lastTs, 100) / 1000;
+                // Reset after one set for seamless infinite loop
+                if(pos >= originalWidth){
+                    pos -= originalWidth;
+                }
+                track.style.transform = 'translateX(' + (-pos) + 'px)';
             }
-            $track.css('transform', 'translateX(' + (-pos) + 'px)');
+            lastTs = ts;
+            sync();
         }
 
-        var interval = setInterval(step, 16);
-        $container.data('iconsSliderInterval', interval);
+        function sync(){
+            if(running && inView && pageVisible){
+                if(!rafId) rafId = requestAnimationFrame(frame);
+            } else {
+                if(rafId){
+                    cancelAnimationFrame(rafId);
+                    rafId = 0;
+                }
+                lastTs = null;
+            }
+        }
+
+        if(typeof window.IntersectionObserver === 'function'){
+            new IntersectionObserver(function(entries){
+                inView = entries[entries.length - 1].isIntersecting;
+                sync();
+            }).observe(container);
+        }
+
+        document.addEventListener('visibilitychange', function(){
+            pageVisible = !document.hidden;
+            sync();
+        });
+
+        sync();
 
         function pause(){
             running = false;
+            sync();
         }
 
         function resume(){
             running = slideCount >= getMinSlidesForAnimation();
+            sync();
         }
 
         $container.on('mouseenter.iconsSlider', pause);
@@ -152,6 +193,7 @@ jQuery(document).ready(function($){
             // update running state based on slide count
             running = slideCount >= getMinSlidesForAnimation();
             updateModeClass();
+            sync();
             if(pos >= originalWidth){
                 pos = pos % originalWidth;
             }
